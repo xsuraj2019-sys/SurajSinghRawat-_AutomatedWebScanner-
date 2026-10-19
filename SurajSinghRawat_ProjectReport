@@ -1,0 +1,26 @@
+PROJECT REPORT: Automated Web Scanner
+IBM SkillsBuild Cyber Security BootCamp 2026
+Student Name: Suraj Singh Rawat 
+Course: BCA 1st Year 
+Institution: School of Management Sciences,Lucknow 
+1. Project Objective
+The main objective of this project is to create a simple, automated Python script that scans target websites to see if they are missing critical security headers. In modern web security, HTTP headers act as a first line of defense against common attacks like Cross-Site Scripting (XSS) and Clickjacking. This tool helps quickly identify if a website has these defenses turned on.
+2. Tools and Technologies Used
+Programming Language: Python 3
+Libraries: requests (used to send HTTP GET requests over the internet to the target website)
+Concepts Applied: Web Application Security, HTTP Protocols, Cross-Origin Resource Sharing (CORS)
+3. Project Description
+The Automated Web Scanner is a lightweight tool. When the user runs the script, it asks them to input a website URL (for example, google.com).
+The script then reaches out to that website and reads the server's response. It specifically looks for four crucial security headers:
+Strict-Transport-Security (HSTS): Ensures the browser only connects over secure HTTPS.
+Content-Security-Policy (CSP): Prevents attackers from injecting malicious scripts (XSS).
+X-Frame-Options: Prevents "Clickjacking" where a site is hidden inside an invisible frame.
+X-Content-Type-Options: Stops the browser from guessing file types, preventing MIME-sniffing.
+Additionally, the scanner checks the Access-Control-Allow-Origin header. If this header is set to *, it flags a warning, because it means the site has an overly permissive CORS policy that might allow any other website to read its data.
+4. How the Code Works
+Input: The user types a web address. The program checks if it starts with "http" and adds it if it is missing.
+Connection: The requests.get() function connects to the website and downloads the header information.
+Checking: A for loop goes through a dictionary of the required security headers. It uses simple if/else logic: if the header is found in the website's response, it prints "[PASS]". If it is missing, it prints "[FAIL]" and explains what the header is supposed to protect against.
+Error Handling: If the user types a fake website or the internet is down, a try/except block catches the error so the program doesn't crash, and prints a friendly error message instead.
+5. Conclusion
+This project successfully demonstrates how basic Python programming can be used to automate cybersecurity auditing tasks. As a 1st-year BCA student, building this scanner provided hands-on experience with HTTP requests, dictionary data structures in Python, and understanding how web servers communicate security policies to internet browsers.
