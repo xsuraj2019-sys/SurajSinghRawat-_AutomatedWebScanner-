@@ -1,0 +1,55 @@
+```python
+import requests
+
+def scan_security_headers(url):
+    """
+    Scans a given URL for basic security headers and CORS flaws.
+    """
+    # Ensure the URL has http:// or https://
+    if not url.startswith('http'):
+        url = 'https://' + url
+
+    print(f"--- Starting Scan for {url} ---")
+    
+    try:
+        # Send a GET request to the website
+        response = requests.get(url, timeout=5)
+        headers = response.headers
+
+        # List of important security headers we want to check for
+        important_headers = {
+            'Strict-Transport-Security': 'Protects against man-in-the-middle attacks',
+            'Content-Security-Policy': 'Helps prevent Cross-Site Scripting (XSS)',
+            'X-Frame-Options': 'Prevents Clickjacking attacks',
+            'X-Content-Type-Options': 'Prevents MIME-sniffing vulnerabilities'
+        }
+
+        print("\n[+] Checking Security Headers:")
+        # Loop through our list and check if the website's response contains them
+        for header, description in important_headers.items():
+            if header in headers:
+                print(f"  [PASS] {header} is present.")
+            else:
+                print(f"  [FAIL] Missing {header}! ({description})")
+
+        print("\n[+] Checking CORS Configuration:")
+        # Check for permissive CORS flaws
+        cors_header = headers.get('Access-Control-Allow-Origin')
+        if cors_header == '*':
+            print("  [WARNING] Highly permissive CORS policy found (Access-Control-Allow-Origin: *)")
+        elif cors_header:
+            print(f"  [PASS] CORS policy is restricted to: {cors_header}")
+        else:
+            print("  [PASS] No permissive CORS headers found.")
+
+    except requests.exceptions.RequestException as e:
+        print(f"\n[ERROR] Could not connect to the website. Please check the URL.\nDetails: {e}")
+        
+    print("\n--- Scan Complete ---")
+
+# --- Main Program Execution ---
+if __name__ == "__main__":
+    print("Welcome to the Simple Web Scanner!")
+    target_website = input("Enter a website URL to scan (e.g., example.com): ")
+    scan_security_headers(target_website)
+```
